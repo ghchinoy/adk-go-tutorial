@@ -48,17 +48,40 @@ The `docs/tutorials` directory contains step-by-step guides progressing from bas
 
 ## Running Experiments
 
-Navigate to any experiment directory and run it. You may need to set your Google Cloud project ID:
+All experiments use the standard ADK launcher, which supports multiple modes of operation.
 
+First, set your environment variables:
 ```bash
-cd experiments/quickstart
 export GOOGLE_CLOUD_PROJECT=your-project-id
-# Optional: Set location if not using us-central1
-# export GOOGLE_CLOUD_LOCATION=us-west1
-go run main.go
+export GOOGLE_CLOUD_LOCATION=us-central1 # or your preferred region
 ```
 
-*Note: Some experiments might require local `go.mod` adjustments if the ADK SDK is not available in standard module proxies.*
+Navigate to an experiment directory:
+```bash
+cd experiments/quickstart
+```
+
+### 1. Interactive Console Mode
+This is the best way to test an agent manually. It opens an interactive session where you can chat with the agent.
+```bash
+go run main.go console
+```
+
+### 2. Web Server Mode
+Runs the agent as a REST API server (default port 8080).
+```bash
+go run main.go web
+```
+You can then send requests:
+```bash
+curl -X POST -d '{"prompt": "Hello"}' http://localhost:8080/api/v1/turn
+```
+
+### 3. Single-Turn (Piping Input)
+For quick, non-interactive testing, you can pipe input directly to the console mode.
+```bash
+printf "What time is it in Tokyo?\n" | go run main.go console
+```
 
 ## Interactive Tutorial with Gemini CLI
 

@@ -6,7 +6,7 @@ This repository contains a structured set of tutorials for the Go ADK. When assi
 
 ## Tutorial Structure
 
-The tutorials are numbered 01-09 in `docs/tutorials/` and have corresponding code in `experiments/`. Each `experiments/` directory now also contains a `README.md` file summarizing its tutorial.
+The tutorials are numbered 01-09 in `docs/tutorials/` and have corresponding code in `experiments/`.
 
 | Experiment Directory | Key Concept |
 |---|---|
@@ -20,6 +20,15 @@ The tutorials are numbered 01-09 in `docs/tutorials/` and have corresponding cod
 | `human_in_the_loop` | Pausing for user input via tools. |
 | `long_term_memory` | Using `memory.Service` across sessions (no launcher). |
 
+## Teaching Workflow
+
+When guiding a user through the tutorials, follow this sequence for *each* numbered tutorial:
+
+1.  **Concept Introduction:** Read the corresponding `docs/tutorials/XX_*.md` file. Summarize the "Core Concepts" for the user *before* running the code.
+2.  **Code Walkthrough:** Briefly highlight how those concepts are implemented in the `experiments/XX_*/main.go` file.
+3.  **Execution:** Run the experiment using the appropriate method (usually `console` mode for interactivity).
+4.  **Pause for Understanding:** Explicitly ask the user if they have questions about the current tutorial's concepts before offering to move to the next one.
+
 ## Operational Guidelines
 
 ### 1. Initialization & Setup
@@ -30,26 +39,10 @@ cd experiments/<experiment_name>
 go mod tidy
 ```
 
-### 2. Authentication Standardization
-For consistency in enterprise/cloud environments, standardizing on Vertex AI is recommended.
-
-**Action:** Before running any experiment, you MUST ask the user for their Google Cloud Project ID and Location. Then, check `main.go` and replace the `gemini.NewModel` initialization to use Vertex AI.
-
-*Old:*
-```go
-model, err := gemini.NewModel(ctx, "gemini-2.5-flash", &genai.ClientConfig{
-    APIKey: os.Getenv("GOOGLE_API_KEY"),
-})
-```
-
-*New:*
-```go
-model, err := gemini.NewModel(ctx, "gemini-2.5-flash", &genai.ClientConfig{
-    Backend:  genai.BackendVertexAI,
-    Project:  os.Getenv("GOOGLE_CLOUD_PROJECT"),
-    Location: os.Getenv("GOOGLE_CLOUD_LOCATION"),
-})
-```
+### 2. Authentication (Vertex AI Standard)
+All tutorials in this repository have been standardized to use the **Vertex AI** backend.
+*   Ensure the user has provided `GOOGLE_CLOUD_PROJECT` and `GOOGLE_CLOUD_LOCATION`.
+*   Export these as environment variables before running any experiment.
 
 ### 3. Running Agents
 The `full.NewLauncher` used in these samples primarily supports `console` and `web` modes. It does **not** support a standalone `run` command for single-turn input in standard `os.Args`.
@@ -74,4 +67,3 @@ The `full.NewLauncher` used in these samples primarily supports `console` and `w
 ### 4. Known Issues & Fixes
 *   **JSON Schema Tags:** Some `jsonschema` tags in the samples (e.g., `description=...`) may cause runtime errors with strict parsers.
     *   *Fix:* If an error like `tag must not begin with 'WORD='` occurs, simplify or remove the `jsonschema` struct tags in the experiment's `main.go`.
-

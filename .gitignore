@@ -35,4 +35,5 @@ go.work.sum
 drivectl-mcp.log
 .genkit
 
+.commit.txt
 

@@ -1,5 +1,7 @@
 # Agent Development Kit (ADK) for Go - Samples & Tutorials
 
+**Note:** This tutorial series utilizes Google Cloud's Vertex AI for its Generative AI models and requires a Google Cloud Project with the Vertex AI API enabled.
+
 This repository contains a comprehensive set of tutorials and experimental samples for learning how to build intelligent agents using the [Agent Development Kit (ADK) for Go](https://github.com/googleapis/adk-go).
 
 ## Getting Started

@@ -1,10 +1,12 @@
 # ADK Go Samples - Assistant Guide
 
+**Note:** This tutorial series utilizes Google Cloud's Vertex AI for its Generative AI models and requires a Google Cloud Project with the Vertex AI API enabled.
+
 This repository contains a structured set of tutorials for the Go ADK. When assisting a user with this repository, follow these guidelines to ensure a smooth experience.
 
 ## Tutorial Structure
 
-The tutorials are numbered 01-09 in `docs/tutorials/` and have corresponding code in `experiments/`.
+The tutorials are numbered 01-09 in `docs/tutorials/` and have corresponding code in `experiments/`. Each `experiments/` directory now also contains a `README.md` file summarizing its tutorial.
 
 | Experiment Directory | Key Concept |
 |---|---|
@@ -21,18 +23,17 @@ The tutorials are numbered 01-09 in `docs/tutorials/` and have corresponding cod
 ## Operational Guidelines
 
 ### 1. Initialization & Setup
-Most experiment directories do not have pre-initialized Go modules. Before running any experiment (except `quickstart` and `long_term_memory`), you MUST initialize it:
+All experiment directories have pre-initialized Go modules. Before running any experiment, ensure dependencies are up to date:
 
 ```bash
 cd experiments/<experiment_name>
-go mod init <experiment_name>
 go mod tidy
 ```
 
 ### 2. Authentication Standardization
-The samples default to using `APIKey`. For consistency in enterprise/cloud environments, standardizing on Vertex AI is recommended if the user provides a Google Cloud Project ID.
+For consistency in enterprise/cloud environments, standardizing on Vertex AI is recommended.
 
-**Action:** When asked to run an experiment, check `main.go` and replace the `gemini.NewModel` initialization to use Vertex AI if appropriate for the user's context:
+**Action:** Before running any experiment, you MUST ask the user for their Google Cloud Project ID and Location. Then, check `main.go` and replace the `gemini.NewModel` initialization to use Vertex AI.
 
 *Old:*
 ```go
@@ -61,6 +62,13 @@ The `full.NewLauncher` used in these samples primarily supports `console` and `w
 *   **Multi-Turn Testing:** Use `printf` with multiple lines:
     ```bash
     printf "First turn\nSecond turn\n" | go run main.go console
+    ```
+*   **Interactive Actions with Environment Variables:** When performing interactive actions that require environment variables, use the following pattern:
+    ```bash
+    export GOOGLE_CLOUD_PROJECT=<your-project-id>
+    export GOOGLE_CLOUD_LOCATION=<your-location>
+    cd experiments/<experiment_name>
+    printf "Your input here\n" | go run main.go console
     ```
 
 ### 4. Known Issues & Fixes
